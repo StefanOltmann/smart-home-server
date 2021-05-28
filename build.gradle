@@ -1,0 +1,133 @@
+buildscript {
+    ext {
+        // Dependency versions
+        // Must be defined here instead of "gradle.properties" because of
+        // https://github.com/dependabot/dependabot-core/issues/1618
+        detektVersion = '1.17.1'
+        gitVersioningVersion = '4.2.0'
+        gsonVersion = '2.8.7'
+        influxDbVersion = '2.2.0'
+        knxCoreVersion = '0.5.0'
+        kotlinCsvVersion = '0.15.2'
+        kotlinVersion = '1.5.10'
+        logbackVersion = '1.2.3'
+        quarkusVersion = '1.13.6.Final'
+        slf4jVersion = '1.7.30'
+        sonarqubeVersion = '3.2.0'
+    }
+}
+
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "$kotlinVersion"
+    id "org.jetbrains.kotlin.plugin.allopen" version "$kotlinVersion"
+    id "io.quarkus" version "$quarkusVersion"
+    id "me.qoomon.git-versioning" version "$gitVersioningVersion"
+    id "io.gitlab.arturbosch.detekt" version "$detektVersion"
+    id "org.sonarqube" version "$sonarqubeVersion"
+}
+
+description "Stefans Smart Home Server"
+group "de.stefan_oltmann.smarthome.server"
+version "0.0.0"
+
+gitVersioning.apply {
+    branch {
+        pattern = 'master'
+        versionFormat = '${commit.short}'
+    }
+    tag {
+        pattern = 'v(?<tagVersion>[0-9].*)'
+        versionFormat = '${tagVersion}'
+    }
+}
+
+detekt {
+    allRules = true
+    config = files("$projectDir/detekt.yml")
+
+    // Don't break the build. Just report.
+    ignoreFailures = true
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "smart-home-server"
+        property "sonar.projectName", "Stefans Smart Home Server"
+        property "sonar.organization", "stefanoltmann"
+        property "sonar.host.url", "https://sonarcloud.io"
+        // Include Detekt issues
+        property "sonar.kotlin.detekt.reportPaths", "build/reports/detekt/detekt.xml"
+    }
+}
+
+// SonarQube should always contain Detekt issues
+tasks.findByPath(':sonarqube').dependsOn('detekt')
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_11
+    kotlinOptions.javaParameters = true
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_11
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+allOpen {
+    annotation("javax.ws.rs.Path")
+    annotation("javax.enterprise.context.ApplicationScoped")
+    annotation("io.quarkus.test.junit.QuarkusTest")
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter() // needed by Detekt
+}
+
+dependencies {
+
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+
+    // Quarkus
+    implementation enforcedPlatform("io.quarkus:quarkus-universe-bom:$quarkusVersion")
+    implementation "io.quarkus:quarkus-kotlin"
+    implementation "io.quarkus:quarkus-resteasy"
+    implementation "io.quarkus:quarkus-resteasy-jackson"
+    implementation "io.quarkus:quarkus-arc"
+
+    // Logging
+    implementation "org.jboss.slf4j:slf4j-jboss-logmanager"
+    implementation("org.slf4j:slf4j-api") {
+        version {
+            // Prevent upgrades here because of compatibility issues
+            strictly slf4jVersion
+        }
+    }
+
+    // GSON
+    implementation "com.google.code.gson:gson:$gsonVersion"
+
+    // KNX
+    implementation "li.pitschmann:knx-core:$knxCoreVersion"
+    implementation "li.pitschmann:knx-core-plugin-audit:$knxCoreVersion"
+
+    // CSV
+    implementation "com.github.doyaaaaaken:kotlin-csv-jvm:$kotlinCsvVersion"
+
+    // InfluxDB
+    implementation "com.influxdb:influxdb-client-kotlin:$influxDbVersion"
+
+    // Unit Tests
+    //testImplementation 'io.quarkus:quarkus-junit5'
+    //testImplementation 'io.rest-assured:rest-assured'
+}

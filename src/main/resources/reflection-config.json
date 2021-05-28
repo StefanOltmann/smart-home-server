@@ -1,0 +1,11 @@
+[
+  {
+    "name": "de.stefan_oltmann.smarthome.server.model.DeviceId",
+    "fields": [
+      {
+        "name": "value",
+        "allowWrite": true
+      }
+    ]
+  }
+]

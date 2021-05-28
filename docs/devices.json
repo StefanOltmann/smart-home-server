@@ -1,0 +1,50 @@
+[
+  {
+    "id": {
+      "value": "central_light"
+    },
+    "name": "All lights",
+    "type": "LIGHT_SWITCH",
+    "gaPowerStateWrite": "0/1/0"
+  },
+  {
+    "id": {
+      "value": "kitchen_light"
+    },
+    "name": "Kitchen",
+    "type": "LIGHT_SWITCH",
+    "gaPowerStateWrite": "1/1/0",
+    "gaPowerStateStatus": "1/1/1"
+  },
+  {
+    "id": {
+      "value": "living_room_dimmer"
+    },
+    "name": "Living room",
+    "type": "DIMMER",
+    "gaPowerStateWrite": "2/1/10",
+    "gaPowerStateStatus": "2/1/13",
+    "gaPercentageWrite": "2/1/12",
+    "gaPercentageStatus": "2/1/14"
+  },
+  {
+    "id": {
+      "value": "living_room_blinds"
+    },
+    "name": "Living room blinds",
+    "type": "ROLLER_SHUTTER",
+    "gaPowerStateWrite": "3/3/0",
+    "gaPowerStateStatus": "3/3/1",
+    "gaPercentageWrite": "3/3/4",
+    "gaPercentageStatus": "3/3/6"
+  },
+  {
+    "id": {
+      "value": "living_room_heating"
+    },
+    "name": "Living room",
+    "type": "HEATING",
+    "gaCurrentTemperature": "2/4/2",
+    "gaTargetTemperature": "2/4/0"
+  }
+]
