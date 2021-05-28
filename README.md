@@ -62,7 +62,7 @@ The application can be packaged using:
 ./gradlew build
 ```
 
-It produces the `smart-home-server-0.1-runner.jar` file in the `/build` directory.
+It produces the `smart-home-server-XY-runner.jar` file in the `/build` directory.
 
 Be aware that it’s not an _uber-jar_ as the dependencies are copied into the `build/lib` directory.
 
@@ -110,9 +110,9 @@ This file needs to be put aside the executable.
 The [devices.json](docs/devices.json) for configuration of your KNX devices data points must be placed in a subdirectory
 named `data`.
 
-Make the binary executable with `chmod +x smart-home-server-XY-runner`.
+Make the binary executable with `chmod +x smart-home-server`.
 
-Run it with `./smart-home-server-XY-runner`.
+Run it with `./smart-home-server`.
 
 During the first start the server will create an _auth_code.txt_ (also in `data`) that contains a security token for
 requests to the service.
