@@ -13,7 +13,7 @@ buildscript {
         logbackVersion = '1.2.3'
         quarkusVersion = '1.13.6.Final'
         slf4jVersion = '1.7.30'
-        sonarqubeVersion = '3.2.0'
+        sonarqubeVersion = '3.3'
     }
 }
 
