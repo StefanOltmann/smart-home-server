@@ -6,7 +6,7 @@ buildscript {
         detektVersion = '1.17.1'
         gitVersioningVersion = '4.2.0'
         gsonVersion = '2.8.7'
-        influxDbVersion = '2.2.0'
+        influxDbVersion = '4.0.0'
         knxCoreVersion = '0.5.0'
         kotlinCsvVersion = '0.15.2'
         kotlinVersion = '1.5.10'
