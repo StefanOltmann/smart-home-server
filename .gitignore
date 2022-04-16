@@ -32,3 +32,4 @@ nb-configuration.xml
 /server_cert.jks
 /server_cert.jks.cer
 /devices.json
+/local.properties
