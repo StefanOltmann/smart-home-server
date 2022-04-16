@@ -107,6 +107,8 @@ Checkout the [releases page](https://github.com/StefanOltmann/smart-home-server/
 The [keystore.jks](src/main/resources/keystore.jks) for HTTPS connections. You can use mine or generate your own.
 This file needs to be put aside the executable.
 
+Note that for local development you may need to trust the [server.cer](src/main/resources/server.cer).
+
 The [devices.json](docs/devices.json) for configuration of your KNX devices data points must be placed in a subdirectory
 named `data`.
 
