@@ -10,7 +10,7 @@ This is a REST API to control a KNX based smart home.
 
 I'm a software developer who owns a KNX-based smart home.
 
-Before I used **[openHAB](https://www.openhab.org/)**, but that was not as reliable and lightweight as I want it to be.
+In the past I used **[openHAB](https://www.openhab.org/)**, but that was not as reliable and lightweight as I want it to be.
 
 Looking for a nice spare time project where I can code some Kotlin and play around with the Alexa SDK, Jetpack Compose
 and Vaadin I decided to start my own Smart Home project at a much smaller scale.
@@ -62,9 +62,9 @@ The application can be packaged using:
 ./gradlew build
 ```
 
-It produces the `smart-home-server-XY-runner.jar` file in the `/build` directory.
+This generates the `smart-home-server-XY-runner.jar` file in the `/build` directory.
 
-Be aware that it’s not an _uber-jar_ as the dependencies are copied into the `build/lib` directory.
+Be aware that this is not an _uber-jar_ as the dependencies are copied into the `build/lib` directory.
 
 If you want to build an _uber-jar_, execute the following command:
 
@@ -150,7 +150,7 @@ calling `https://localhost:50000/device/living_room_blinds/set/percentage/value/
 
 If all of that works you should consider using a DynDNS service and redirect a port to make the service available as
 something like `https://home.mydomain.com:50000` so you can use this API with
-the [Alexa Skill](https://github.com/StefanOltmann/smart-home-alexaskill) or the 
+the [Alexa Skill](https://github.com/StefanOltmann/smart-home-alexaskill) or the
 [Android App](https://github.com/StefanOltmann/smart-home-android).
 
 ## Optional: Using the Docker image
