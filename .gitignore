@@ -27,9 +27,12 @@ nb-configuration.xml
 
 # Local environment
 .env
-/server.log
+/local.properties
+
+# Local config files
 /auth_code.txt
+/devices.json
+/influxdb.ini
+/server.log
 /server_cert.jks
 /server_cert.jks.cer
-/devices.json
-/local.properties
