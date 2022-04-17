@@ -74,47 +74,22 @@ If you want to build an _uber-jar_, execute the following command:
 
 The application is now runnable using `java -jar build/smart-home-server-XY-runner.jar`.
 
-You can create a native executable using:
-
-```shell script
-./gradlew build -Dquarkus.package.type=native
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./gradlew build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./build/smart-home-server-XY-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/gradle-tooling.
-
 ## Optional: Packaging the application using GitHub Actions
 
-This project has GitHub Actions configured to build an _uber-jar_ file as well as native binaries for Windows, Linux and
-MacOS.
+This project has GitHub Actions configured to build an _uber-jar_ file.
 
 Using this free feature is the easiest way to get an binary file as you don't need to install anything on your computer.
 
 Just navigate to the [Actions page](https://github.com/StefanOltmann/smart-home-server/actions), click on the latest run
 and grab the artifacts.
 
-## Using the Linux binary
-
-Checkout the [releases page](https://github.com/StefanOltmann/smart-home-server/releases/) for the latest artifacts.
+## Configuration
 
 The [keystore.jks](src/main/resources/keystore.jks) for HTTPS connections. You can use mine or generate your own.
 This file needs to be put aside the executable.
 
-Note that for local development you may need to trust the [server.cer](src/main/resources/server.cer).
-
 The [devices.json](docs/devices.json) for configuration of your KNX devices data points must be placed in a subdirectory
 named `data`. In addition you can define a [webhooks.json](docs/webhooks.json) file if you want a webhook called on a fire alarm for instance.
-
-Make the binary executable with `chmod +x smart-home-server`.
-
-Run it with `./smart-home-server`.
 
 During the first start the server will create an _auth_code.txt_ (also in `data`) that contains a security token for
 requests to the service.
@@ -176,5 +151,3 @@ To configure this you need to place a [influxdb.ini](docs/influxdb.ini) in your 
 
 The first line should be the URL and the second line the token.
 The organisation must be named `smarthome` and the bucket must be named `SmartHome`.
-
-**NOTE: Since Retrofit does not work with GraalVM native-image this feature is not supported for the binary distribution.**
