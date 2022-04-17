@@ -65,7 +65,7 @@ class ApplicationService {
 
             knxServiceTemp = KnxServiceImpl(deviceRepository, deviceStateRepository)
 
-            /* Read all state initially */
+            /* Read all states initially */
             knxServiceTemp.readAllDeviceStates()
 
             logger.info("KNX service started.")

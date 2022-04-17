@@ -43,6 +43,7 @@ object Main {
         /* Override application.properties setting to respect data dir. */
         System.setProperty("quarkus.log.file.path", "$DATA_DIR_NAME/$LOG_FILE_NAME")
 
+        /* Try to create a data folder on startup. */
         createDataDirIfNeeded()
 
         Quarkus.run(MyApp::class.java, *args)
@@ -52,7 +53,6 @@ object Main {
 
         val dataDir = File(DATA_DIR_NAME)
 
-        /* Try to create folder on startup. */
         if (!dataDir.exists()) {
 
             val dataDirCreated = dataDir.mkdirs()
@@ -100,7 +100,7 @@ object Main {
     }
 
     /**
-     * Generates a long random String that is suitable as authorization code.
+     * Generates a long random string that is suitable as authorization code.
      */
     private fun generateAuthCode(): String {
 
