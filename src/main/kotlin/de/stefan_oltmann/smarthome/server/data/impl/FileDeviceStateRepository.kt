@@ -31,7 +31,7 @@ private const val HISTORY_CSV = "device_state_history.csv"
 /**
  * Class acting as a container for multiple DeviceStatus and managing updates to them.
  */
-class CsvDeviceStateRepository : DeviceStateRepository {
+class FileDeviceStateRepository : DeviceStateRepository {
 
     private val csvWriter = csvWriter {
         charset = "ISO_8859_1"

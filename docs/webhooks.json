@@ -1,0 +1,8 @@
+[
+  {
+    "deviceId": {
+      "value": "fire_alarm"
+    },
+    "url": "https://example.com/my_web_hook_to_notify_about_a_fire"
+  }
+]

@@ -110,7 +110,7 @@ This file needs to be put aside the executable.
 Note that for local development you may need to trust the [server.cer](src/main/resources/server.cer).
 
 The [devices.json](docs/devices.json) for configuration of your KNX devices data points must be placed in a subdirectory
-named `data`.
+named `data`. In addition you can define a [webhooks.json](docs/webhooks.json) file if you want a webhook called on a fire alarm for instance.
 
 Make the binary executable with `chmod +x smart-home-server`.
 

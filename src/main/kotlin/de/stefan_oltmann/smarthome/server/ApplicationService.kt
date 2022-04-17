@@ -20,13 +20,12 @@ package de.stefan_oltmann.smarthome.server
 
 import de.stefan_oltmann.smarthome.server.data.DeviceRepository
 import de.stefan_oltmann.smarthome.server.data.DeviceStateRepository
-import de.stefan_oltmann.smarthome.server.data.impl.CsvDeviceRepository
-import de.stefan_oltmann.smarthome.server.data.impl.CsvDeviceStateRepository
-import de.stefan_oltmann.smarthome.server.data.impl.INFLUX_FILE_NAME
-import de.stefan_oltmann.smarthome.server.data.impl.InfluxDbDeviceStateRepository
+import de.stefan_oltmann.smarthome.server.data.impl.*
 import de.stefan_oltmann.smarthome.server.data.impl.InfluxDbDeviceStateRepository.InfluxDbSettings
 import de.stefan_oltmann.smarthome.server.knx.KnxService
 import de.stefan_oltmann.smarthome.server.knx.impl.KnxServiceImpl
+import de.stefan_oltmann.smarthome.server.service.WebhookService
+import de.stefan_oltmann.smarthome.server.service.WebhookServiceImpl
 import java.io.File
 import javax.inject.Singleton
 
@@ -41,7 +40,7 @@ class ApplicationService {
 
     init {
 
-        deviceRepository = CsvDeviceRepository()
+        deviceRepository = FileDeviceRepository()
 
         val influxDbSettings = findInfluxDbSettings()
 
@@ -55,7 +54,11 @@ class ApplicationService {
             deviceStateRepository = InfluxDbDeviceStateRepository(influxDbSettings)
 
         } else
-            deviceStateRepository = CsvDeviceStateRepository()
+            deviceStateRepository = FileDeviceStateRepository()
+
+        val webhookRepository = FileWebhookRepository()
+
+        val webhookService = WebhookServiceImpl(webhookRepository)
 
         logger.info("Staring KNX service...")
 
@@ -63,7 +66,11 @@ class ApplicationService {
 
         try {
 
-            knxServiceTemp = KnxServiceImpl(deviceRepository, deviceStateRepository)
+            knxServiceTemp = KnxServiceImpl(
+                deviceRepository,
+                deviceStateRepository,
+                webhookService
+            )
 
             /* Read all states initially */
             knxServiceTemp.readAllDeviceStates()

@@ -27,6 +27,7 @@ import de.stefan_oltmann.smarthome.server.model.Device
 import de.stefan_oltmann.smarthome.server.model.DeviceId
 import de.stefan_oltmann.smarthome.server.model.DevicePowerState
 import de.stefan_oltmann.smarthome.server.model.GroupAddressType
+import de.stefan_oltmann.smarthome.server.service.WebhookService
 import li.pitschmann.knx.core.address.GroupAddress
 import li.pitschmann.knx.core.body.Body
 import li.pitschmann.knx.core.body.TunnelingRequestBody
@@ -43,6 +44,7 @@ import li.pitschmann.knx.core.plugin.audit.FileAuditPlugin
 import li.pitschmann.knx.core.utils.Sleeper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.net.http.WebSocketHandshakeException
 import java.nio.file.Paths
 import kotlin.concurrent.thread
 
@@ -50,14 +52,19 @@ const val KNX_AUDIT_FILE_NAME = "knx-audit.log"
 
 class KnxServiceImpl(
     private val deviceRepository: DeviceRepository,
-    deviceStateRepository: DeviceStateRepository
+    deviceStateRepository: DeviceStateRepository,
+    webhookService: WebhookService
 ) : KnxService {
 
     private var knxClient: KnxClient
 
     init {
 
-        val groupMonitorPlugin = GroupMonitorPlugin(deviceRepository, deviceStateRepository)
+        val groupMonitorPlugin = GroupMonitorPlugin(
+            deviceRepository,
+            deviceStateRepository,
+            webhookService
+        )
 
         val auditPlugin = FileAuditPlugin()
 
@@ -163,7 +170,8 @@ class KnxServiceImpl(
 
     class GroupMonitorPlugin(
         private val deviceRepository: DeviceRepository,
-        private val deviceStateRepository: DeviceStateRepository
+        private val deviceStateRepository: DeviceStateRepository,
+        private val webhookService: WebhookService
     ) : ObserverPlugin {
 
         private val logger: Logger = LoggerFactory.getLogger(GroupMonitorPlugin::class.java)
@@ -245,6 +253,12 @@ class KnxServiceImpl(
                 val powerState = if (value) DevicePowerState.ON else DevicePowerState.OFF
 
                 deviceStateRepository.updatePowerState(deviceId, powerState)
+
+                /*
+                 * Only trigger if an alarm becomes active.
+                 */
+                if (powerState == DevicePowerState.ON)
+                    webhookService.triggerWebhook(deviceId)
 
             } catch (ex: DataPointTypeIncompatibleBytesException) {
                 logger.error(createWrongTypeMessage(groupAddress, item, "DPT1"), ex)

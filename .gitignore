@@ -36,3 +36,4 @@ nb-configuration.xml
 /server.log
 /server_cert.jks
 /server_cert.jks.cer
+/webhooks.json

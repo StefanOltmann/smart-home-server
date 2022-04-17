@@ -1,0 +1,14 @@
+[
+  {
+    "deviceId": {
+      "value": "feueralarm"
+    },
+    "url": "https://maker.ifttt.com/trigger/alarm/json/with/key/ecKxQJT-SlAmr_0T9XY7kk7wCh940ar3TDBCQy_bN02"
+  },
+  {
+    "deviceId": {
+      "value": "feueralarm"
+    },
+    "url": "https://maker.ifttt.com/trigger/{event}/json/with/key/o9isPXFiJcuDo2yf0QfxW0_JHImD3FvIfAms3koF9OD"
+  }
+]

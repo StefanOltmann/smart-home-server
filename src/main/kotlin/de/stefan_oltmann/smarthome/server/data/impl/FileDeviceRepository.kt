@@ -28,10 +28,11 @@ import de.stefan_oltmann.smarthome.server.model.GroupAddressType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.lang.Exception
 
 const val DEVICES_FILE_NAME = "devices.json"
 
-class CsvDeviceRepository : DeviceRepository {
+class FileDeviceRepository : DeviceRepository {
 
     override val devices: List<Device>
 
@@ -48,11 +49,24 @@ class CsvDeviceRepository : DeviceRepository {
 
         if (devicesFile.exists()) {
 
-            val listType = object : TypeToken<ArrayList<Device>>() {}.type
+            var parsedDevices: List<Device>
 
-            devices = gson.fromJson(devicesFile.readText(), listType)
+            try {
 
-            logger.info("Started with ${devices.size} devices from '${devicesFile.absolutePath}'.")
+                val listType = object : TypeToken<ArrayList<Device>>() {}.type
+
+                parsedDevices = gson.fromJson(devicesFile.readText(), listType)
+
+                logger.info("Started with ${parsedDevices.size} devices from '${devicesFile.absolutePath}'.")
+
+            } catch (ex: Exception) {
+
+                parsedDevices = emptyList()
+
+                logger.error("Could not parse '${devicesFile.absolutePath}'", ex)
+            }
+
+            devices = parsedDevices
 
         } else {
 
@@ -90,7 +104,7 @@ class CsvDeviceRepository : DeviceRepository {
 
     companion object {
 
-        val logger: Logger = LoggerFactory.getLogger(CsvDeviceRepository::class.java)
+        val logger: Logger = LoggerFactory.getLogger(FileDeviceRepository::class.java)
 
     }
 }
