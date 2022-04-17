@@ -39,8 +39,9 @@ const val INFLUX_BUCKET_NAME = "SmartHome"
 /**
  * Class acting as a container for multiple DeviceStatus and managing updates to them.
  */
-class InfluxDbDeviceStateRepository(private val influxDbSettings: InfluxDbSettings) :
-    DeviceStateRepository {
+class InfluxDbDeviceStateRepository(
+    influxDbSettings: InfluxDbSettings
+) : DeviceStateRepository {
 
     /**
      * Internal mutable map of the current state of each device.
