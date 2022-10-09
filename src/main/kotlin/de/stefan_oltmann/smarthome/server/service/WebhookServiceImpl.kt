@@ -1,7 +1,6 @@
 package de.stefan_oltmann.smarthome.server.service
 
 import de.stefan_oltmann.smarthome.server.data.WebhookRepository
-import de.stefan_oltmann.smarthome.server.data.impl.FileWebhookRepository
 import de.stefan_oltmann.smarthome.server.model.DeviceId
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -11,7 +10,7 @@ import java.net.URL
 
 class WebhookServiceImpl(
     private val webhookRepository: WebhookRepository
-): WebhookService {
+) : WebhookService {
 
     private val httpClient: OkHttpClient = OkHttpClient()
 

@@ -10,7 +10,8 @@ This is a REST API to control a KNX based smart home.
 
 I'm a software developer who owns a KNX-based smart home.
 
-In the past I used **[openHAB](https://www.openhab.org/)**, but that was not as reliable and lightweight as I want it to be.
+In the past I used **[openHAB](https://www.openhab.org/)**, but that was not as reliable and lightweight as I want it to
+be.
 
 Looking for a nice spare time project where I can code some Kotlin and play around with the Alexa SDK, Jetpack Compose
 and Vaadin I decided to start my own Smart Home project at a much smaller scale.
@@ -89,7 +90,8 @@ The [keystore.jks](src/main/resources/keystore.jks) for HTTPS connections. You c
 This file needs to be put aside the executable.
 
 The [devices.json](docs/devices.json) for configuration of your KNX devices data points must be placed in a subdirectory
-named `data`. In addition you can define a [webhooks.json](docs/webhooks.json) file if you want a webhook called on a fire alarm for instance.
+named `data`. In addition you can define a [webhooks.json](docs/webhooks.json) file if you want a webhook called on a
+fire alarm for instance.
 
 During the first start the server will create an _auth_code.txt_ (also in `data`) that contains a security token for
 requests to the service.
@@ -145,7 +147,8 @@ Also you need to put the [devices.json](docs/devices.json) configuration file he
 
 Per default the service will write a `device_state_history.csv` that you can import in a tool of your choice.
 
-But you also can store measurements in a [InfluxDB](https://github.com/influxdata/influxdb) directly if you want to create charts with [Grafana](https://github.com/grafana/grafana).
+But you also can store measurements in a [InfluxDB](https://github.com/influxdata/influxdb) directly if you want to
+create charts with [Grafana](https://github.com/grafana/grafana).
 
 To configure this you need to place a [influxdb.ini](docs/influxdb.ini) in your `data` directory.
 
