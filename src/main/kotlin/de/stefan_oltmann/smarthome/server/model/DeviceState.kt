@@ -38,6 +38,15 @@ class DeviceState(val deviceId: DeviceId) {
     var targetTemperature: Double? = null
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    var windSpeed: Double? = null
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var lightIntensity: Double? = null
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var rainfall: Boolean? = null
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     var locked: Boolean? = null
 
 }

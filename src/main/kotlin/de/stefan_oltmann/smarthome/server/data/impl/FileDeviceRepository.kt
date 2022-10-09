@@ -96,6 +96,9 @@ class FileDeviceRepository : DeviceRepository {
                 device.gaCurrentTemperature -> return device to GroupAddressType.CURRENT_TEMPERATURE
                 device.gaTargetTemperatureWrite -> return device to GroupAddressType.TARGET_TEMPERATURE_WRITE
                 device.gaTargetTemperatureStatus -> return device to GroupAddressType.TARGET_TEMPERATURE_STATUS
+                device.gaWindSpeed -> return device to GroupAddressType.WIND_SPEED
+                device.gaLightIntensity -> return device to GroupAddressType.LIGHT_INTENSITY
+                device.gaRainfall -> return device to GroupAddressType.RAINFALL
                 device.gaLockObject -> return device to GroupAddressType.LOCK_OBJECT
             }
         }

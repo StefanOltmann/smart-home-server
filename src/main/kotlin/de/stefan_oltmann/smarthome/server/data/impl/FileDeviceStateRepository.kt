@@ -140,6 +140,57 @@ class FileDeviceStateRepository : DeviceStateRepository {
         )
     }
 
+    override fun updateWindSpeed(deviceId: DeviceId, windSpeed: Double) {
+
+        getOrCreateDeviceStatus(deviceId).windSpeed = windSpeed
+
+        val millis = System.currentTimeMillis()
+
+        /* Write local object */
+        _history.add(DeviceStateHistoryEntry(deviceId, millis, windSpeed = windSpeed))
+
+        /* Persist */
+        csvWriter.writeAll(
+            rows = listOf(listOf(deviceId.value, millis, "windSpeed", windSpeed)),
+            targetFileName = "$DATA_DIR_NAME/$HISTORY_CSV",
+            append = true
+        )
+    }
+
+    override fun updateLightIntensity(deviceId: DeviceId, lightIntensity: Double) {
+
+        getOrCreateDeviceStatus(deviceId).lightIntensity = lightIntensity
+
+        val millis = System.currentTimeMillis()
+
+        /* Write local object */
+        _history.add(DeviceStateHistoryEntry(deviceId, millis, lightIntensity = lightIntensity))
+
+        /* Persist */
+        csvWriter.writeAll(
+            rows = listOf(listOf(deviceId.value, millis, "lightIntensity", lightIntensity)),
+            targetFileName = "$DATA_DIR_NAME/$HISTORY_CSV",
+            append = true
+        )
+    }
+
+    override fun updateRainfall(deviceId: DeviceId, rainfall: Boolean) {
+
+        getOrCreateDeviceStatus(deviceId).rainfall = rainfall
+
+        val millis = System.currentTimeMillis()
+
+        /* Write local object */
+        _history.add(DeviceStateHistoryEntry(deviceId, millis, rainfall = rainfall))
+
+        /* Persist */
+        csvWriter.writeAll(
+            rows = listOf(listOf(deviceId.value, millis, "rainfall", if (rainfall) 1 else 0)),
+            targetFileName = "$DATA_DIR_NAME/$HISTORY_CSV",
+            append = true
+        )
+    }
+
     override fun updateLockObject(deviceId: DeviceId, locked: Boolean) {
 
         getOrCreateDeviceStatus(deviceId).locked = locked

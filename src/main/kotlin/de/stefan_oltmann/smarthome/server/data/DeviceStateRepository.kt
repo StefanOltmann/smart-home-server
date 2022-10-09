@@ -43,6 +43,12 @@ interface DeviceStateRepository {
 
     fun updateTargetTemperature(deviceId: DeviceId, temperature: Double)
 
+    fun updateWindSpeed(deviceId: DeviceId, windSpeed: Double)
+
+    fun updateLightIntensity(deviceId: DeviceId, lightIntensity: Double)
+
+    fun updateRainfall(deviceId: DeviceId, rainfall: Boolean)
+
     fun updateLockObject(deviceId: DeviceId, locked: Boolean)
 
 }

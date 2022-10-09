@@ -162,6 +162,61 @@ class InfluxDbDeviceStateRepository(
         runBlocking { client.getWriteKotlinApi().writePoint(point) }
     }
 
+    override fun updateWindSpeed(deviceId: DeviceId, windSpeed: Double) {
+
+        getOrCreateDeviceStatus(deviceId).windSpeed = windSpeed
+
+        val millis = System.currentTimeMillis()
+
+        /* Write local object */
+        _history.add(DeviceStateHistoryEntry(deviceId, millis, windSpeed = windSpeed))
+
+        /* Persist */
+
+        val point = Point.measurement(deviceId.value)
+            .addField("windSpeed", windSpeed)
+            .time(Instant.now().toEpochMilli(), WritePrecision.MS)
+
+        runBlocking { client.getWriteKotlinApi().writePoint(point) }
+    }
+
+    override fun updateLightIntensity(deviceId: DeviceId, lightIntensity: Double) {
+
+        getOrCreateDeviceStatus(deviceId).lightIntensity = lightIntensity
+
+        val millis = System.currentTimeMillis()
+
+        /* Write local object */
+        _history.add(DeviceStateHistoryEntry(deviceId, millis, lightIntensity = lightIntensity))
+
+        /* Persist */
+
+        val point = Point.measurement(deviceId.value)
+            .addField("lightIntensity", lightIntensity)
+            .time(Instant.now().toEpochMilli(), WritePrecision.MS)
+
+        runBlocking { client.getWriteKotlinApi().writePoint(point) }
+    }
+
+    override fun updateRainfall(deviceId: DeviceId, rainfall: Boolean) {
+
+        getOrCreateDeviceStatus(deviceId).rainfall = rainfall
+
+        val millis = System.currentTimeMillis()
+
+        /* Write local object */
+        _history.add(DeviceStateHistoryEntry(deviceId, millis, rainfall = rainfall))
+
+        /* Persist */
+
+        val point = Point.measurement(deviceId.value)
+            /* Don't write the boolean. "false" is not handled properly. */
+            .addField("rainfall", if (rainfall) 1 else 0)
+            .time(Instant.now().toEpochMilli(), WritePrecision.MS)
+
+        runBlocking { client.getWriteKotlinApi().writePoint(point) }
+    }
+
     override fun updateLockObject(deviceId: DeviceId, locked: Boolean) {
 
         getOrCreateDeviceStatus(deviceId).locked = locked

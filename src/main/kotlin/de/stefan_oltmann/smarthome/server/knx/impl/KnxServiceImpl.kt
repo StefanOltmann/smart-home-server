@@ -123,35 +123,59 @@ class KnxServiceImpl(
          * otherwise there are to many requests at once and KNX IP will fail due to this.
          */
 
-        for (device in deviceRepository.devices) {
+        val requestAllDevicesRunnable = Runnable {
 
-            device.gaPowerStateStatus?.let { groupAddress ->
-                knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
-            }
+            for (device in deviceRepository.devices) {
 
-            device.gaPercentageStatus?.let { groupAddress ->
-                knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
-            }
+                device.gaPowerStateStatus?.let { groupAddress ->
+                    knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
+                }
 
-            device.gaCurrentTemperature?.let { groupAddress ->
-                knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
-            }
+                device.gaPercentageStatus?.let { groupAddress ->
+                    knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
+                }
 
-            device.gaTargetTemperatureStatus?.let { groupAddress ->
-                knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
-            }
+                device.gaCurrentTemperature?.let { groupAddress ->
+                    knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
+                }
 
-            device.gaLockObject?.let { groupAddress ->
-                knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
+                device.gaTargetTemperatureStatus?.let { groupAddress ->
+                    knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
+                }
+
+                device.gaWindSpeed?.let { groupAddress ->
+                    knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
+                }
+
+                device.gaLightIntensity?.let { groupAddress ->
+                    knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
+                }
+
+                device.gaRainfall?.let { groupAddress ->
+                    knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
+                }
+
+                device.gaLockObject?.let { groupAddress ->
+                    knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
+                }
+
+                /*
+                 * With a short wait the chances are way better that we get
+                 * all states in the end. If we spam the KNX bus most of the
+                 * answers will be dropped.
+                 */
+                Thread.sleep(DELAY_BETWEEN_DEVICES_MS)
             }
         }
+
+        Thread(requestAllDevicesRunnable).start()
     }
 
     override fun writePowerState(device: Device, powerState: DevicePowerState) {
 
         knxClient.writeRequest(
             GroupAddress.of(device.gaPowerStateWrite),
-            booleanDpt.of(powerState == DevicePowerState.ON)
+            DPT1.BOOL.of(powerState == DevicePowerState.ON)
         )
     }
 
@@ -159,7 +183,7 @@ class KnxServiceImpl(
 
         knxClient.writeRequest(
             GroupAddress.of(device.gaPercentageWrite),
-            percentageDpt.of(percentage)
+            DPT5.SCALING.of(percentage)
         )
     }
 
@@ -167,7 +191,7 @@ class KnxServiceImpl(
 
         knxClient.writeRequest(
             GroupAddress.of(device.gaTargetTemperatureWrite),
-            temperatureDpt.of(temperature)
+            DPT9.TEMPERATURE.of(temperature)
         )
     }
 
@@ -239,6 +263,21 @@ class KnxServiceImpl(
                     device.id,
                     groupAddress
                 )
+                GroupAddressType.WIND_SPEED -> handleWindSpeedItem(
+                    item,
+                    device.id,
+                    groupAddress
+                )
+                GroupAddressType.LIGHT_INTENSITY -> handleLightIntensityItem(
+                    item,
+                    device.id,
+                    groupAddress
+                )
+                GroupAddressType.RAINFALL -> handleRainfallItem(
+                    item,
+                    device.id,
+                    groupAddress
+                )
                 GroupAddressType.LOCK_OBJECT -> handleLockObjectItem(
                     item,
                     device.id,
@@ -256,7 +295,7 @@ class KnxServiceImpl(
 
             try {
 
-                val value = booleanDpt.of(item.cemi.data).value
+                val value = DPT1.BOOL.of(item.cemi.data).value
 
                 val powerState = if (value) DevicePowerState.ON else DevicePowerState.OFF
 
@@ -281,9 +320,11 @@ class KnxServiceImpl(
 
             try {
 
-                val percentage = percentageDpt.of(item.cemi.data).value
+                val percentage = (DPT5.PERCENT.of(item.cemi.data).value / 255.0) * 100
 
-                deviceStateRepository.updatePercentage(deviceId, percentage)
+                println("percent: $percentage")
+
+                deviceStateRepository.updatePercentage(deviceId, percentage.toInt())
 
             } catch (ex: DataPointTypeIncompatibleBytesException) {
                 logger.error(createWrongTypeMessage(groupAddress, item, "DPT5"), ex)
@@ -298,7 +339,7 @@ class KnxServiceImpl(
 
             try {
 
-                val temperature = temperatureDpt.of(item.cemi.data).value
+                val temperature = DPT9.TEMPERATURE.of(item.cemi.data).value
 
                 deviceStateRepository.updateCurrentTemperature(deviceId, temperature)
 
@@ -315,12 +356,69 @@ class KnxServiceImpl(
 
             try {
 
-                val temperature = temperatureDpt.of(item.cemi.data).value
+                val temperature = DPT9.TEMPERATURE.of(item.cemi.data).value
 
                 deviceStateRepository.updateTargetTemperature(deviceId, temperature)
 
             } catch (ex: DataPointTypeIncompatibleBytesException) {
                 logger.error(createWrongTypeMessage(groupAddress, item, "DPT9"), ex)
+            }
+        }
+
+        private fun handleWindSpeedItem(
+            item: TunnelingRequestBody,
+            deviceId: DeviceId,
+            groupAddress: GroupAddress
+        ) {
+
+            try {
+
+                val windSpeed = DPT9.WIND_SPEED.of(item.cemi.data).value
+
+                println("Wind speed value: $windSpeed")
+
+                deviceStateRepository.updateWindSpeed(deviceId, windSpeed)
+
+            } catch (ex: DataPointTypeIncompatibleBytesException) {
+                logger.error(createWrongTypeMessage(groupAddress, item, "DPT9"), ex)
+            }
+        }
+
+        private fun handleLightIntensityItem(
+            item: TunnelingRequestBody,
+            deviceId: DeviceId,
+            groupAddress: GroupAddress
+        ) {
+
+            try {
+
+                val lightIntensity = DPT9.LUMINOUS_FLUX.of(item.cemi.data).value
+
+                println("lightIntensity: $lightIntensity")
+
+                deviceStateRepository.updateLightIntensity(deviceId, lightIntensity)
+
+            } catch (ex: DataPointTypeIncompatibleBytesException) {
+                logger.error(createWrongTypeMessage(groupAddress, item, "DPT9"), ex)
+            }
+        }
+
+        private fun handleRainfallItem(
+            item: TunnelingRequestBody,
+            deviceId: DeviceId,
+            groupAddress: GroupAddress
+        ) {
+
+            try {
+
+                val rainfall = DPT1.BOOL.of(item.cemi.data).value
+
+                println("rainfall: $rainfall")
+
+                deviceStateRepository.updateRainfall(deviceId, rainfall)
+
+            } catch (ex: DataPointTypeIncompatibleBytesException) {
+                logger.error(createWrongTypeMessage(groupAddress, item, "DPT1"), ex)
             }
         }
 
@@ -332,7 +430,7 @@ class KnxServiceImpl(
 
             try {
 
-                val locked = booleanDpt.of(item.cemi.data).value
+                val locked = DPT1.BOOL.of(item.cemi.data).value
 
                 deviceStateRepository.updateLockObject(deviceId, locked)
 
@@ -354,6 +452,7 @@ class KnxServiceImpl(
 
     companion object {
 
+        const val DELAY_BETWEEN_DEVICES_MS = 200L
         const val READ_TIMEOUT_MS = 3000L
 
         /*
@@ -361,10 +460,6 @@ class KnxServiceImpl(
          */
         const val KNX_CONTROL_CHANNEL_PORT = 50011
         const val KNX_DATA_CHANNEL_PORT = 50012
-
-        val booleanDpt: DPT1 = DPT1.BOOL
-        val percentageDpt: DPT5 = DPT5.SCALING
-        val temperatureDpt: DPT9 = DPT9.TEMPERATURE
 
         val logger: Logger = LoggerFactory.getLogger(KnxServiceImpl::class.java)
 

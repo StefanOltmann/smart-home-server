@@ -42,6 +42,11 @@ enum class DeviceType {
     HEATING,
 
     /**
+     * A weather station.
+     */
+    WEATHER_STATION,
+
+    /**
      * A fire or wind alarm for instance.
      */
     ALARM;
