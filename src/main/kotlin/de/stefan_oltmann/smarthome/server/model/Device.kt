@@ -32,6 +32,7 @@ data class Device(
     @JsonInclude(JsonInclude.Include.NON_NULL) val gaPercentageWrite: String? = null,
     @JsonInclude(JsonInclude.Include.NON_NULL) val gaPercentageStatus: String? = null,
     @JsonInclude(JsonInclude.Include.NON_NULL) val gaCurrentTemperature: String? = null,
-    @JsonInclude(JsonInclude.Include.NON_NULL) val gaTargetTemperature: String? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL) val gaTargetTemperatureWrite: String? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL) val gaTargetTemperatureStatus: String? = null,
     @JsonInclude(JsonInclude.Include.NON_NULL) val gaLockObject: String? = null
 )

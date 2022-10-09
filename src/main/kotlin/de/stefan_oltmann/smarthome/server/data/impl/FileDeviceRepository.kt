@@ -94,7 +94,8 @@ class FileDeviceRepository : DeviceRepository {
                 device.gaPercentageWrite -> return device to GroupAddressType.PERCENTAGE_WRITE
                 device.gaPercentageStatus -> return device to GroupAddressType.PERCENTAGE_STATUS
                 device.gaCurrentTemperature -> return device to GroupAddressType.CURRENT_TEMPERATURE
-                device.gaTargetTemperature -> return device to GroupAddressType.TARGET_TEMPERATURE
+                device.gaTargetTemperatureWrite -> return device to GroupAddressType.TARGET_TEMPERATURE_WRITE
+                device.gaTargetTemperatureStatus -> return device to GroupAddressType.TARGET_TEMPERATURE_STATUS
                 device.gaLockObject -> return device to GroupAddressType.LOCK_OBJECT
             }
         }

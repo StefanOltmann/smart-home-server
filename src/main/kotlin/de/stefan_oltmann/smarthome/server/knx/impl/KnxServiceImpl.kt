@@ -137,7 +137,7 @@ class KnxServiceImpl(
                 knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
             }
 
-            device.gaTargetTemperature?.let { groupAddress ->
+            device.gaTargetTemperatureStatus?.let { groupAddress ->
                 knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
             }
 
@@ -166,7 +166,7 @@ class KnxServiceImpl(
     override fun writeTargetTemperature(device: Device, temperature: Double) {
 
         knxClient.writeRequest(
-            GroupAddress.of(device.gaTargetTemperature),
+            GroupAddress.of(device.gaTargetTemperatureWrite),
             temperatureDpt.of(temperature)
         )
     }
@@ -234,7 +234,7 @@ class KnxServiceImpl(
                     device.id,
                     groupAddress
                 )
-                GroupAddressType.TARGET_TEMPERATURE -> handleTargetTemperatureItem(
+                GroupAddressType.TARGET_TEMPERATURE_STATUS -> handleTargetTemperatureItem(
                     item,
                     device.id,
                     groupAddress
@@ -357,7 +357,7 @@ class KnxServiceImpl(
         const val READ_TIMEOUT_MS = 3000L
 
         /*
-         * Fixed ports so it's clear what needs to be exposed in Docker
+         * Fixed ports to be clear what needs to be exposed in Docker
          */
         const val KNX_CONTROL_CHANNEL_PORT = 50011
         const val KNX_DATA_CHANNEL_PORT = 50012
