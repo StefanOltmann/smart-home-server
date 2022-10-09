@@ -174,7 +174,8 @@ class InfluxDbDeviceStateRepository(
         /* Persist */
 
         val point = Point.measurement(deviceId.value)
-            .addField("locked", locked)
+            /* Don't write the boolean. "false" is not handled properly. */
+            .addField("locked", if (locked) 1 else 0)
             .time(Instant.now().toEpochMilli(), WritePrecision.MS)
 
         runBlocking { client.getWriteKotlinApi().writePoint(point) }
