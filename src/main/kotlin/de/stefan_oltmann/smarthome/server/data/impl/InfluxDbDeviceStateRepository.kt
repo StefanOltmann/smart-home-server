@@ -162,6 +162,24 @@ class InfluxDbDeviceStateRepository(
         runBlocking { client.getWriteKotlinApi().writePoint(point) }
     }
 
+    override fun updateLockObject(deviceId: DeviceId, locked: Boolean) {
+
+        getOrCreateDeviceStatus(deviceId).locked = locked
+
+        val millis = System.currentTimeMillis()
+
+        /* Write local object */
+        _history.add(DeviceStateHistoryEntry(deviceId, millis, locked = locked))
+
+        /* Persist */
+
+        val point = Point.measurement(deviceId.value)
+            .addField("locked", locked)
+            .time(Instant.now().toEpochMilli(), WritePrecision.MS)
+
+        runBlocking { client.getWriteKotlinApi().writePoint(point) }
+    }
+
     data class InfluxDbSettings(val url: String, val token: String)
 
     companion object {

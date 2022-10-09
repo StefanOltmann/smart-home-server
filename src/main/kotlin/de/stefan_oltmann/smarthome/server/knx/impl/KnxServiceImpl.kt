@@ -44,7 +44,6 @@ import li.pitschmann.knx.core.plugin.audit.FileAuditPlugin
 import li.pitschmann.knx.core.utils.Sleeper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.net.http.WebSocketHandshakeException
 import java.nio.file.Paths
 import kotlin.concurrent.thread
 
@@ -141,6 +140,10 @@ class KnxServiceImpl(
             device.gaTargetTemperature?.let { groupAddress ->
                 knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
             }
+
+            device.gaLockObject?.let { groupAddress ->
+                knxClient.readRequest(GroupAddress.of(groupAddress), READ_TIMEOUT_MS)
+            }
         }
     }
 
@@ -148,7 +151,7 @@ class KnxServiceImpl(
 
         knxClient.writeRequest(
             GroupAddress.of(device.gaPowerStateWrite),
-            powerStateDpt.of(powerState == DevicePowerState.ON)
+            booleanDpt.of(powerState == DevicePowerState.ON)
         )
     }
 
@@ -236,6 +239,11 @@ class KnxServiceImpl(
                     device.id,
                     groupAddress
                 )
+                GroupAddressType.LOCK_OBJECT -> handleLockObjectItem(
+                    item,
+                    device.id,
+                    groupAddress
+                )
                 else -> return
             }
         }
@@ -248,7 +256,7 @@ class KnxServiceImpl(
 
             try {
 
-                val value = powerStateDpt.of(item.cemi.data).value
+                val value = booleanDpt.of(item.cemi.data).value
 
                 val powerState = if (value) DevicePowerState.ON else DevicePowerState.OFF
 
@@ -316,6 +324,23 @@ class KnxServiceImpl(
             }
         }
 
+        private fun handleLockObjectItem(
+            item: TunnelingRequestBody,
+            deviceId: DeviceId,
+            groupAddress: GroupAddress
+        ) {
+
+            try {
+
+                val locked = booleanDpt.of(item.cemi.data).value
+
+                deviceStateRepository.updateLockObject(deviceId, locked)
+
+            } catch (ex: DataPointTypeIncompatibleBytesException) {
+                logger.error(createWrongTypeMessage(groupAddress, item, "DPT1"), ex)
+            }
+        }
+
         override fun onError(throwable: Throwable) {
             logger.error("KNX client error.", throwable)
         }
@@ -337,7 +362,7 @@ class KnxServiceImpl(
         const val KNX_CONTROL_CHANNEL_PORT = 50011
         const val KNX_DATA_CHANNEL_PORT = 50012
 
-        val powerStateDpt: DPT1 = DPT1.BOOL
+        val booleanDpt: DPT1 = DPT1.BOOL
         val percentageDpt: DPT5 = DPT5.SCALING
         val temperatureDpt: DPT9 = DPT9.TEMPERATURE
 

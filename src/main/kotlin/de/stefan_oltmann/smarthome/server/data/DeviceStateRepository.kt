@@ -43,4 +43,6 @@ interface DeviceStateRepository {
 
     fun updateTargetTemperature(deviceId: DeviceId, temperature: Double)
 
+    fun updateLockObject(deviceId: DeviceId, locked: Boolean)
+
 }

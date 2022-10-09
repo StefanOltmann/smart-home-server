@@ -139,4 +139,21 @@ class FileDeviceStateRepository : DeviceStateRepository {
             append = true
         )
     }
+
+    override fun updateLockObject(deviceId: DeviceId, locked: Boolean) {
+
+        getOrCreateDeviceStatus(deviceId).locked = locked
+
+        val millis = System.currentTimeMillis()
+
+        /* Write local object */
+        _history.add(DeviceStateHistoryEntry(deviceId, millis, locked = locked))
+
+        /* Persist */
+        csvWriter.writeAll(
+            rows = listOf(listOf(deviceId.value, millis, "locked", if (locked) 1 else 0)),
+            targetFileName = "$DATA_DIR_NAME/$HISTORY_CSV",
+            append = true
+        )
+    }
 }

@@ -37,4 +37,7 @@ class DeviceState(val deviceId: DeviceId) {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     var targetTemperature: Double? = null
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var locked: Boolean? = null
+
 }

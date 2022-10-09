@@ -26,5 +26,6 @@ enum class GroupAddressType {
     PERCENTAGE_STATUS,
     CURRENT_TEMPERATURE,
     TARGET_TEMPERATURE,
+    LOCK_OBJECT
 
 }

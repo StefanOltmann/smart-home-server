@@ -28,7 +28,6 @@ import de.stefan_oltmann.smarthome.server.model.GroupAddressType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
-import java.lang.Exception
 
 const val DEVICES_FILE_NAME = "devices.json"
 
@@ -96,6 +95,7 @@ class FileDeviceRepository : DeviceRepository {
                 device.gaPercentageStatus -> return device to GroupAddressType.PERCENTAGE_STATUS
                 device.gaCurrentTemperature -> return device to GroupAddressType.CURRENT_TEMPERATURE
                 device.gaTargetTemperature -> return device to GroupAddressType.TARGET_TEMPERATURE
+                device.gaLockObject -> return device to GroupAddressType.LOCK_OBJECT
             }
         }
 

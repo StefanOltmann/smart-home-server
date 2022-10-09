@@ -26,5 +26,6 @@ data class DeviceStateHistoryEntry(
     @JsonInclude(JsonInclude.Include.NON_NULL) val powerState: DevicePowerState? = null,
     @JsonInclude(JsonInclude.Include.NON_NULL) val percentage: Int? = null,
     @JsonInclude(JsonInclude.Include.NON_NULL) val currentTemperature: Double? = null,
-    @JsonInclude(JsonInclude.Include.NON_NULL) val targetTemperature: Double? = null
+    @JsonInclude(JsonInclude.Include.NON_NULL) val targetTemperature: Double? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL) val locked: Boolean? = null
 )
