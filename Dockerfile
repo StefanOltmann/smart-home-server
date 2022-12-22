@@ -1,14 +1,11 @@
 # syntax=docker/dockerfile:1
-FROM debian:stable-slim
+FROM amazoncorretto:11-alpine
 MAINTAINER Stefan Oltmann
 
 WORKDIR /server
 
 # The application
-COPY smart-home-server .
-
-# Keystore for HTTPS connections
-COPY keystore.jks .
+COPY smart-home-server.jar .
 
 # REST interface
 EXPOSE 50000
@@ -23,4 +20,4 @@ EXPOSE 50012
 VOLUME /server/data
 
 # Run the application
-CMD ["./smart-home-server"]
+CMD ["java", "-jar", "/server/smart-home-server.jar"]
