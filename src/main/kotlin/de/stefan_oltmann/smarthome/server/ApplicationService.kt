@@ -23,7 +23,6 @@ import de.stefan_oltmann.smarthome.server.data.impl.*
 import de.stefan_oltmann.smarthome.server.data.impl.InfluxDbDeviceStateRepository.InfluxDbSettings
 import de.stefan_oltmann.smarthome.server.knx.KnxService
 import de.stefan_oltmann.smarthome.server.knx.impl.KnxServiceImpl
-import de.stefan_oltmann.smarthome.server.service.WebhookService
 import de.stefan_oltmann.smarthome.server.service.WebhookServiceImpl
 import java.io.File
 import javax.inject.Singleton

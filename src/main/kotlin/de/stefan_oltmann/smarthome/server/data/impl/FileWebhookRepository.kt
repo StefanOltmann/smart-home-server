@@ -21,15 +21,11 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import de.stefan_oltmann.smarthome.server.DATA_DIR_NAME
 import de.stefan_oltmann.smarthome.server.data.WebhookRepository
-import de.stefan_oltmann.smarthome.server.model.Device
 import de.stefan_oltmann.smarthome.server.model.DeviceId
 import de.stefan_oltmann.smarthome.server.model.Webhook
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
-import java.lang.Exception
-import java.net.http.WebSocketHandshakeException
-import kotlin.math.log
 
 const val WEBHOOKS_FILE_NAME = "webhooks.json"
 
@@ -48,6 +44,8 @@ class FileWebhookRepository : WebhookRepository {
 
         val webhooksFile = File(DATA_DIR_NAME, WEBHOOKS_FILE_NAME)
 
+        val filePath = webhooksFile.absolutePath
+
         if (webhooksFile.exists()) {
 
             var parsedWebhooks: Set<Webhook>
@@ -58,13 +56,13 @@ class FileWebhookRepository : WebhookRepository {
 
                 parsedWebhooks = gson.fromJson(webhooksFile.readText(), listType)
 
-                logger.info("Started with ${parsedWebhooks.size} webhooks from '${webhooksFile.absolutePath}'.")
+                logger.info("Started with ${parsedWebhooks.size} webhooks from '$filePath'.")
 
             } catch (ex: Exception) {
 
                 parsedWebhooks = emptySet()
 
-                logger.error("Could not parse '${webhooksFile.absolutePath}'", ex)
+                logger.error("Could not parse '$filePath'", ex)
             }
 
             webhooks = parsedWebhooks
@@ -73,7 +71,7 @@ class FileWebhookRepository : WebhookRepository {
 
             webhooks = emptySet()
 
-            logger.error("Did not find file '${webhooksFile.absolutePath}'. Using empty webhook list.")
+            logger.error("Did not find file '$filePath'. Using empty webhook list.")
         }
     }
 

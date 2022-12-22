@@ -326,7 +326,7 @@ class KnxServiceImpl(
 
             try {
 
-                val percentage = (DPT5.PERCENT.of(item.cemi.data).value / 255.0) * 100
+                val percentage = DPT5.PERCENT.of(item.cemi.data).value / 255.0 * 100
 
                 deviceStateRepository.updatePercentage(deviceId, percentage.toInt())
 
@@ -456,8 +456,8 @@ class KnxServiceImpl(
         /*
          * Fixed ports to be clear what needs to be exposed in Docker
          */
-        const val KNX_CONTROL_CHANNEL_PORT = 50011
-        const val KNX_DATA_CHANNEL_PORT = 50012
+        const val KNX_CONTROL_CHANNEL_PORT = 50_011
+        const val KNX_DATA_CHANNEL_PORT = 50_012
 
         val logger: Logger = LoggerFactory.getLogger(KnxServiceImpl::class.java)
 

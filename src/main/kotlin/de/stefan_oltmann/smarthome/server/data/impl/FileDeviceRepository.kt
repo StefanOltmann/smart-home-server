@@ -45,6 +45,8 @@ class FileDeviceRepository : DeviceRepository {
 
         val devicesFile = File(DATA_DIR_NAME, DEVICES_FILE_NAME)
 
+        val filePath = devicesFile.absolutePath
+
         if (devicesFile.exists()) {
 
             var parsedDevices: List<Device>
@@ -55,13 +57,13 @@ class FileDeviceRepository : DeviceRepository {
 
                 parsedDevices = gson.fromJson(devicesFile.readText(), listType)
 
-                logger.info("Started with ${parsedDevices.size} devices from '${devicesFile.absolutePath}'.")
+                logger.info("Started with ${parsedDevices.size} devices from '$filePath'.")
 
             } catch (ex: Exception) {
 
                 parsedDevices = emptyList()
 
-                logger.error("Could not parse '${devicesFile.absolutePath}'", ex)
+                logger.error("Could not parse '$filePath'", ex)
             }
 
             devices = parsedDevices
@@ -70,7 +72,7 @@ class FileDeviceRepository : DeviceRepository {
 
             devices = emptyList()
 
-            logger.error("Did not find file '${devicesFile.absolutePath}'. Using empty devices list.")
+            logger.error("Did not find file '$filePath'. Using empty devices list.")
         }
     }
 
@@ -88,17 +90,39 @@ class FileDeviceRepository : DeviceRepository {
         for (device in devices) {
 
             when (groupAddress) {
-                device.gaPowerStateWrite -> return device to GroupAddressType.POWER_STATE_WRITE
-                device.gaPowerStateStatus -> return device to GroupAddressType.POWER_STATE_STATUS
-                device.gaPercentageWrite -> return device to GroupAddressType.PERCENTAGE_WRITE
-                device.gaPercentageStatus -> return device to GroupAddressType.PERCENTAGE_STATUS
-                device.gaCurrentTemperature -> return device to GroupAddressType.CURRENT_TEMPERATURE
-                device.gaTargetTemperatureWrite -> return device to GroupAddressType.TARGET_TEMPERATURE_WRITE
-                device.gaTargetTemperatureStatus -> return device to GroupAddressType.TARGET_TEMPERATURE_STATUS
-                device.gaWindSpeed -> return device to GroupAddressType.WIND_SPEED
-                device.gaLightIntensity -> return device to GroupAddressType.LIGHT_INTENSITY
-                device.gaRainfall -> return device to GroupAddressType.RAINFALL
-                device.gaLockObject -> return device to GroupAddressType.LOCK_OBJECT
+
+                device.gaPowerStateWrite ->
+                    return device to GroupAddressType.POWER_STATE_WRITE
+
+                device.gaPowerStateStatus ->
+                    return device to GroupAddressType.POWER_STATE_STATUS
+
+                device.gaPercentageWrite ->
+                    return device to GroupAddressType.PERCENTAGE_WRITE
+
+                device.gaPercentageStatus ->
+                    return device to GroupAddressType.PERCENTAGE_STATUS
+
+                device.gaCurrentTemperature ->
+                    return device to GroupAddressType.CURRENT_TEMPERATURE
+
+                device.gaTargetTemperatureWrite ->
+                    return device to GroupAddressType.TARGET_TEMPERATURE_WRITE
+
+                device.gaTargetTemperatureStatus ->
+                    return device to GroupAddressType.TARGET_TEMPERATURE_STATUS
+
+                device.gaWindSpeed ->
+                    return device to GroupAddressType.WIND_SPEED
+
+                device.gaLightIntensity ->
+                    return device to GroupAddressType.LIGHT_INTENSITY
+
+                device.gaRainfall ->
+                    return device to GroupAddressType.RAINFALL
+
+                device.gaLockObject ->
+                    return device to GroupAddressType.LOCK_OBJECT
             }
         }
 

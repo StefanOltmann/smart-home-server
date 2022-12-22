@@ -17,11 +17,7 @@
  */
 package de.stefan_oltmann.smarthome.server
 
-import de.stefan_oltmann.smarthome.server.model.Device
-import de.stefan_oltmann.smarthome.server.model.DeviceId
-import de.stefan_oltmann.smarthome.server.model.DevicePowerState
-import de.stefan_oltmann.smarthome.server.model.DeviceState
-import de.stefan_oltmann.smarthome.server.model.DeviceStateHistoryEntry
+import de.stefan_oltmann.smarthome.server.model.*
 import javax.inject.Inject
 import javax.ws.rs.GET
 import javax.ws.rs.Path
