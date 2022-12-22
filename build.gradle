@@ -3,17 +3,17 @@ buildscript {
         // Dependency versions
         // Must be defined here instead of "gradle.properties" because of
         // https://github.com/dependabot/dependabot-core/issues/1618
-        detektVersion = '1.17.1'
+        detektVersion = '1.22.0'
         gitVersioningVersion = '4.2.0'
-        gsonVersion = '2.9.0'
-        influxDbVersion = '5.0.0'
-        knxCoreVersion = '0.5.0'
-        kotlinCsvVersion = '1.2.0'
-        kotlinVersion = '1.6.20'
+        gsonVersion = '2.10.0'
+        influxDbVersion = '6.7.0'
+        knxCoreVersion = '0.5.0' // li.pitschmann:knx-core-plugin-audit:0.5.1 missing
+        kotlinCsvVersion = '1.7.0'
+        kotlinVersion = '1.7.20'
         logbackVersion = '1.2.3'
         quarkusVersion = '1.13.6.Final'
         slf4jVersion = '1.7.30'
-        sonarqubeVersion = '3.3'
+        sonarqubeVersion = '3.5.0.2730'
         gradleVersionsPluginVersion = '0.44.0'
     }
 }
@@ -79,7 +79,7 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_11
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
