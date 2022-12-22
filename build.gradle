@@ -15,6 +15,7 @@ buildscript {
         slf4jVersion = '1.7.36'
         sonarqubeVersion = '3.5.0.2730'
         gradleVersionsPluginVersion = '0.44.0'
+        gitVersioningVersion = '0.2.1'
     }
 }
 
@@ -22,26 +23,14 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "$kotlinVersion"
     id "org.jetbrains.kotlin.plugin.allopen" version "$kotlinVersion"
     id "io.quarkus" version "$quarkusVersion"
-    id "me.qoomon.git-versioning" version "$gitVersioningVersion"
     id "io.gitlab.arturbosch.detekt" version "$detektVersion"
     id "org.sonarqube" version "$sonarqubeVersion"
     id "com.github.ben-manes.versions" version "$gradleVersionsPluginVersion"
+    id "de.stefan-oltmann.git-versioning" version "$gitVersioningVersion"
 }
 
 description "Stefans Smart Home Server"
 group "de.stefan_oltmann.smarthome.server"
-version "0.0.0"
-
-gitVersioning.apply {
-    branch {
-        pattern = 'master'
-        versionFormat = '${commit.short}'
-    }
-    tag {
-        pattern = 'v(?<tagVersion>[0-9].*)'
-        versionFormat = '${tagVersion}'
-    }
-}
 
 detekt {
 
