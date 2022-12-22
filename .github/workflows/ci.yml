@@ -28,11 +28,11 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+      - name: Build with Gradle
+        run: ./gradlew build sonarqube -Dquarkus.package.type=uber-jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: Build with Gradle
-        run: ./gradlew build sonarqube -Dquarkus.package.type=uber-jar
       - name: Copy resources
         run: cp build/*runner.jar smart-home-server.jar
       - uses: actions/upload-artifact@v2
