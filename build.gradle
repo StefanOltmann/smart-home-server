@@ -14,6 +14,7 @@ buildscript {
         quarkusVersion = '1.13.6.Final'
         slf4jVersion = '1.7.30'
         sonarqubeVersion = '3.3'
+        gradleVersionsPluginVersion = '0.44.0'
     }
 }
 
@@ -24,6 +25,7 @@ plugins {
     id "me.qoomon.git-versioning" version "$gitVersioningVersion"
     id "io.gitlab.arturbosch.detekt" version "$detektVersion"
     id "org.sonarqube" version "$sonarqubeVersion"
+    id "com.github.ben-manes.versions" version "$gradleVersionsPluginVersion"
 }
 
 description "Stefans Smart Home Server"
