@@ -328,8 +328,6 @@ class KnxServiceImpl(
 
                 val percentage = (DPT5.PERCENT.of(item.cemi.data).value / 255.0) * 100
 
-                println("percent: $percentage")
-
                 deviceStateRepository.updatePercentage(deviceId, percentage.toInt())
 
             } catch (ex: DataPointTypeIncompatibleBytesException) {
@@ -381,8 +379,6 @@ class KnxServiceImpl(
 
                 val windSpeed = DPT9.WIND_SPEED.of(item.cemi.data).value
 
-                println("Wind speed value: $windSpeed")
-
                 deviceStateRepository.updateWindSpeed(deviceId, windSpeed)
 
             } catch (ex: DataPointTypeIncompatibleBytesException) {
@@ -400,8 +396,6 @@ class KnxServiceImpl(
 
                 val lightIntensity = DPT9.LUMINOUS_FLUX.of(item.cemi.data).value
 
-                println("lightIntensity: $lightIntensity")
-
                 deviceStateRepository.updateLightIntensity(deviceId, lightIntensity)
 
             } catch (ex: DataPointTypeIncompatibleBytesException) {
@@ -418,8 +412,6 @@ class KnxServiceImpl(
             try {
 
                 val rainfall = DPT1.BOOL.of(item.cemi.data).value
-
-                println("rainfall: $rainfall")
 
                 deviceStateRepository.updateRainfall(deviceId, rainfall)
 
