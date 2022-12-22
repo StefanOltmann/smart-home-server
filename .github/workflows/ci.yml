@@ -1,6 +1,9 @@
 name: Build artifacts
 
-on: push
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   jar:
@@ -38,10 +41,25 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           if-no-files-found: error
-          name: smart-home-server-jar
+          name: smart-home-server
           path: |
             smart-home-server.jar
             Dockerfile
+      - name: Tag the build
+        run: |
+          ./gradlew writeVersionFile writeVersionGitTag && git push origin --tags
+          echo "RELEASE_VERSION=$(cat build/build_version.txt)" >> $GITHUB_ENV
+          echo ${{ env.RELEASE_VERSION }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.RELEASE_VERSION }}
+          release_name: Stefans Smart Home Server v${{ env.RELEASE_VERSION }}
+          draft: false
+          prerelease: false
 
   docker:
     runs-on: ubuntu-latest
@@ -60,7 +78,7 @@ jobs:
       - name: Download a Build Artifact
         uses: actions/download-artifact@v2.0.9
         with:
-          name: smart-home-server-jar
+          name: smart-home-server
       - name: Display files
         run: find .
       - name: Build and push
