@@ -1,6 +1,6 @@
 /*
  * Stefans Smart Home Project
- * Copyright (C) 2021 Stefan Oltmann
+ * Copyright (C) 2022 Stefan Oltmann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

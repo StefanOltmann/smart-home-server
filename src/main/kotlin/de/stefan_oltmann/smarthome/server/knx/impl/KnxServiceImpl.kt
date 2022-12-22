@@ -1,6 +1,6 @@
 /*
  * Stefans Smart Home Project
- * Copyright (C) 2021 Stefan Oltmann
+ * Copyright (C) 2022 Stefan Oltmann
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,14 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 package de.stefan_oltmann.smarthome.server.knx.impl
 
 import de.stefan_oltmann.smarthome.server.DATA_DIR_NAME
 import de.stefan_oltmann.smarthome.server.data.DeviceRepository
 import de.stefan_oltmann.smarthome.server.data.DeviceStateRepository
 import de.stefan_oltmann.smarthome.server.knx.KnxService
-import de.stefan_oltmann.smarthome.server.knx.toHex
 import de.stefan_oltmann.smarthome.server.model.Device
 import de.stefan_oltmann.smarthome.server.model.DeviceId
 import de.stefan_oltmann.smarthome.server.model.DevicePowerState
@@ -248,41 +246,49 @@ class KnxServiceImpl(
                     device.id,
                     groupAddress
                 )
+
                 GroupAddressType.PERCENTAGE_STATUS -> handlePercentageStatusItem(
                     item,
                     device.id,
                     groupAddress
                 )
+
                 GroupAddressType.CURRENT_TEMPERATURE -> handleCurrentTemperatureItem(
                     item,
                     device.id,
                     groupAddress
                 )
+
                 GroupAddressType.TARGET_TEMPERATURE_STATUS -> handleTargetTemperatureItem(
                     item,
                     device.id,
                     groupAddress
                 )
+
                 GroupAddressType.WIND_SPEED -> handleWindSpeedItem(
                     item,
                     device.id,
                     groupAddress
                 )
+
                 GroupAddressType.LIGHT_INTENSITY -> handleLightIntensityItem(
                     item,
                     device.id,
                     groupAddress
                 )
+
                 GroupAddressType.RAINFALL -> handleRainfallItem(
                     item,
                     device.id,
                     groupAddress
                 )
+
                 GroupAddressType.LOCK_OBJECT -> handleLockObjectItem(
                     item,
                     device.id,
                     groupAddress
                 )
+
                 else -> return
             }
         }
