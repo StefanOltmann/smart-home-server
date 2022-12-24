@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM amazoncorretto:11-alpine
+FROM amazoncorretto:17-alpine
 MAINTAINER Stefan Oltmann
 
 WORKDIR /server
