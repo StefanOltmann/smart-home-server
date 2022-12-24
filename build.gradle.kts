@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("jvm") version Versions.kotlin
     id("io.quarkus") version Versions.quarkus
@@ -11,6 +9,16 @@ plugins {
 
 description = "Stefans Smart Home Server"
 group = "de.stefan_oltmann.smarthome.server"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
+    kotlinOptions.javaParameters = true
+}
 
 detekt {
 
@@ -34,10 +42,6 @@ sonarqube {
 // SonarQube should always contain Detekt issues
 tasks.findByPath(":sonarqube")?.dependsOn("detekt")
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = Versions.jvm
-}
-
 repositories {
     mavenCentral()
 }
@@ -57,7 +61,6 @@ dependencies {
     implementation("li.pitschmann:knx-core-plugin-audit:${Versions.knxCore}")
 
     // Serialization
-    implementation("com.google.code.gson:gson:${Versions.gson}")
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:${Versions.kotlinCsv}")
 
     // Persistence

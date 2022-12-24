@@ -1,8 +1,5 @@
 object Versions {
 
-    // JVM
-    const val jvm = "11"
-
     // Gradle plugins
     const val detekt = "1.22.0"
     const val sonarqube = "3.5.0.2730"
@@ -19,7 +16,6 @@ object Versions {
     const val knxCore = "0.5.0"
 
     // Serialization
-    const val gson = "2.10"
     const val kotlinCsv = "1.7.0"
 
     // Persistence
