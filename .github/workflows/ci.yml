@@ -13,10 +13,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # No shallow clones for SonarQube
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 17
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Cache SonarCloud packages
