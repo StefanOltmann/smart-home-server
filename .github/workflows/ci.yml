@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # No shallow clones for SonarQube
+          fetch-depth: 0  # No shallow clones
       - name: Set up Java JDK 17
         uses: actions/setup-java@v3
         with:
@@ -33,7 +33,7 @@ jobs:
       - name: Build
         run: |
           chmod +x ./gradlew
-          ./gradlew build sonarqube -Dquarkus.package.type=uber-jar
+          ./gradlew build -Dquarkus.package.type=uber-jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed by SonarCloud for PR information.
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
