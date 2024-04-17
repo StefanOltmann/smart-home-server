@@ -15,3 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+package de.stefan_oltmann.smarthome.server.data
+
+import de.stefan_oltmann.smarthome.server.model.Daikin
+import de.stefan_oltmann.smarthome.server.model.DeviceId
+import de.stefan_oltmann.smarthome.server.model.Webhook
+
+interface DaikinRepository {
+
+    val daikins: Set<Daikin>
+
+}

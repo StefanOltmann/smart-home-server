@@ -19,6 +19,7 @@ package de.stefan_oltmann.smarthome.server
 
 import de.stefan_oltmann.smarthome.server.data.DeviceRepository
 import de.stefan_oltmann.smarthome.server.data.DeviceStateRepository
+import de.stefan_oltmann.smarthome.server.data.impl.FileDaikinRepository
 import de.stefan_oltmann.smarthome.server.data.impl.FileDeviceRepository
 import de.stefan_oltmann.smarthome.server.data.impl.FileDeviceStateRepository
 import de.stefan_oltmann.smarthome.server.data.impl.FileWebhookRepository
@@ -27,6 +28,7 @@ import de.stefan_oltmann.smarthome.server.data.impl.InfluxDbDeviceStateRepositor
 import de.stefan_oltmann.smarthome.server.data.impl.InfluxDbDeviceStateRepository.InfluxDbSettings
 import de.stefan_oltmann.smarthome.server.knx.KnxService
 import de.stefan_oltmann.smarthome.server.knx.impl.KnxServiceImpl
+import de.stefan_oltmann.smarthome.server.service.DaikinServiceImpl
 import de.stefan_oltmann.smarthome.server.service.WebhookServiceImpl
 import java.io.File
 import javax.inject.Singleton
@@ -55,8 +57,12 @@ class ApplicationService {
 
             deviceStateRepository = InfluxDbDeviceStateRepository(influxDbSettings)
 
-        } else
+        } else {
+
+            logger.info("$INFLUX_FILE_NAME not found. Will log to local file.")
+
             deviceStateRepository = FileDeviceStateRepository()
+        }
 
         val webhookRepository = FileWebhookRepository()
 

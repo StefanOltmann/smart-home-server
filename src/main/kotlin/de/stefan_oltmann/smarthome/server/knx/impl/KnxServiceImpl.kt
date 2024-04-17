@@ -20,11 +20,14 @@ package de.stefan_oltmann.smarthome.server.knx.impl
 import de.stefan_oltmann.smarthome.server.DATA_DIR_NAME
 import de.stefan_oltmann.smarthome.server.data.DeviceRepository
 import de.stefan_oltmann.smarthome.server.data.DeviceStateRepository
+import de.stefan_oltmann.smarthome.server.data.impl.FileDaikinRepository
 import de.stefan_oltmann.smarthome.server.knx.KnxService
 import de.stefan_oltmann.smarthome.server.model.Device
 import de.stefan_oltmann.smarthome.server.model.DeviceId
 import de.stefan_oltmann.smarthome.server.model.DevicePowerState
 import de.stefan_oltmann.smarthome.server.model.GroupAddressType
+import de.stefan_oltmann.smarthome.server.service.DaikinService
+import de.stefan_oltmann.smarthome.server.service.DaikinServiceImpl
 import de.stefan_oltmann.smarthome.server.service.WebhookService
 import li.pitschmann.knx.core.address.GroupAddress
 import li.pitschmann.knx.core.body.Body
@@ -54,6 +57,9 @@ class KnxServiceImpl(
 ) : KnxService {
 
     private var knxClient: KnxClient
+
+    private val daikinService: DaikinService =
+        DaikinServiceImpl(FileDaikinRepository())
 
     init {
 
@@ -87,8 +93,14 @@ class KnxServiceImpl(
 
                     knxClient.use { client ->
 
-                        while (client.isRunning)
+                        while (client.isRunning) {
+
+                            logger.info("RUNNING!")
+
                             Sleeper.seconds(1)
+
+                            daikinService.updateStates(knxClient)
+                        }
                     }
 
                 } catch (ex: Exception) {
