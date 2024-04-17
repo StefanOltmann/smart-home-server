@@ -2,12 +2,11 @@ object Versions {
 
     // Gradle plugins
     const val detekt = "1.22.0"
-    const val sonarqube = "3.5.0.2730"
     const val gradleVersions = "0.44.0"
     const val gitVersioning = "0.2.1"
 
     // Kotlin
-    const val kotlin = "1.7.21"
+    const val kotlin = "1.9.23"
 
     // Quarkus
     const val quarkus = "2.15.1.Final"

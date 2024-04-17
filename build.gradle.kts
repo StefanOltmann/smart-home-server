@@ -2,7 +2,6 @@ plugins {
     kotlin("jvm") version Versions.kotlin
     id("io.quarkus") version Versions.quarkus
     id("io.gitlab.arturbosch.detekt") version Versions.detekt
-    id("org.sonarqube") version Versions.sonarqube
     id("com.github.ben-manes.versions") version Versions.gradleVersions
     id("de.stefan-oltmann.git-versioning") version Versions.gitVersioning
 }
@@ -27,20 +26,6 @@ detekt {
     // Don't break the build. Just report.
     ignoreFailures = true
 }
-
-sonarqube {
-    properties {
-        property("sonar.projectKey", "smart-home-server")
-        property("sonar.projectName", "Stefans Smart Home Server")
-        property("sonar.organization", "stefanoltmann")
-        property("sonar.host.url", "https://sonarcloud.io")
-        // Include Detekt issues
-        property("sonar.kotlin.detekt.reportPaths", "build/reports/detekt/detekt.xml")
-    }
-}
-
-// SonarQube should always contain Detekt issues
-tasks.findByPath(":sonarqube")?.dependsOn("detekt")
 
 repositories {
     mavenCentral()
