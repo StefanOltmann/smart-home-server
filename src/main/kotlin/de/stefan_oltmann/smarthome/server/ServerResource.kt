@@ -18,6 +18,7 @@
 package de.stefan_oltmann.smarthome.server
 
 import de.stefan_oltmann.smarthome.server.model.*
+import io.quarkus.runtime.Startup
 import javax.inject.Inject
 import javax.ws.rs.GET
 import javax.ws.rs.Path
@@ -35,6 +36,7 @@ val DEVICE_DOES_NOT_EXIST_RESPONSE: Response =
 val KNX_SERVICE_NOT_AVAILABLE_RESPONSE: Response =
     Response.serverError().entity("KNX service not available.").build()
 
+@Startup
 @Path("/")
 class ServerResource {
 
