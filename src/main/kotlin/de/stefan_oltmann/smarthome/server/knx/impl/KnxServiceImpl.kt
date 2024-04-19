@@ -95,9 +95,7 @@ class KnxServiceImpl(
 
                         while (client.isRunning) {
 
-                            logger.info("RUNNING!")
-
-                            Sleeper.seconds(1)
+                            Sleeper.seconds(60)
 
                             daikinService.updateStates(knxClient)
                         }
