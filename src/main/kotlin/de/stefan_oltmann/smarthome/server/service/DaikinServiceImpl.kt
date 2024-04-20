@@ -22,7 +22,9 @@ import de.stefan_oltmann.smarthome.server.data.WebhookRepository
 import de.stefan_oltmann.smarthome.server.model.DeviceId
 import io.quarkus.logging.Log
 import kotlinx.coroutines.delay
+import li.pitschmann.knx.core.address.GroupAddress
 import li.pitschmann.knx.core.communication.KnxClient
+import li.pitschmann.knx.core.datapoint.DPT9
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.slf4j.Logger
@@ -32,23 +34,56 @@ import kotlin.concurrent.thread
 
 class DaikinServiceImpl(
     private val daikinRepository: DaikinRepository
-): DaikinService {
+) : DaikinService {
 
     private val httpClient: OkHttpClient = OkHttpClient()
 
     override fun updateStates(knxClient: KnxClient) {
 
-        logger.info("DO SOMETHING")
+        try {
 
-        for (daikin in daikinRepository.daikins) {
+            for (daikin in daikinRepository.daikins) {
 
-//                    val url = URL(webhook.url)
-//
-//                    val request = Request.Builder().url(url).build()
-//
-//                    val response = httpClient.newCall(request).execute()
+                val url = URL("http://${daikin.ip}/aircon/get_sensor_info")
 
+                val request = Request.Builder().url(url).build()
 
+                val response = httpClient.newCall(request).execute()
+
+                /* Example: "ret=OK,htemp=20.0,hhum=-,otemp=6.0,err=0,cmpfreq=0,mompow=1" */
+                val returnString = response.body()?.bytes()?.decodeToString()
+
+                if (returnString == null) {
+                    Log.info("Skip Daikin ${daikin.ip} as we did not receive wanted response.")
+                    continue
+                }
+
+                for (part in returnString.split(',')) {
+
+                    if (part.startsWith(DAIKIN_HOUSE_TEMP_KEY)) {
+
+                        val temp = part.substring(DAIKIN_HOUSE_TEMP_KEY.length)
+
+                        knxClient.writeRequest(
+                            GroupAddress.of(daikin.gaHouseTemp),
+                            DPT9.TEMPERATURE.of(temp.toDouble())
+                        )
+                    }
+
+                    if (part.startsWith(DAIKIN_OUTER_TEMP_KEY)) {
+
+                        val temp = part.substring(DAIKIN_OUTER_TEMP_KEY.length)
+
+                        knxClient.writeRequest(
+                            GroupAddress.of(daikin.gaOuterTemp),
+                            DPT9.TEMPERATURE.of(temp.toDouble())
+                        )
+                    }
+                }
+            }
+
+        } catch (ex: Exception) {
+            logger.error("Updating Daikin states failed.", ex)
         }
     }
 
@@ -56,5 +91,7 @@ class DaikinServiceImpl(
 
         val logger: Logger = LoggerFactory.getLogger(DaikinServiceImpl::class.java)
 
+        const val DAIKIN_HOUSE_TEMP_KEY = "htemp="
+        const val DAIKIN_OUTER_TEMP_KEY = "otemp="
     }
 }

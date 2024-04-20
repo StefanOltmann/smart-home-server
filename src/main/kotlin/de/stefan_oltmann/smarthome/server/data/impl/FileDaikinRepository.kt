@@ -53,7 +53,7 @@ class FileDaikinRepository : DaikinRepository {
 
             try {
 
-                val listType = object : TypeToken<HashSet<Webhook>>() {}.type
+                val listType = object : TypeToken<HashSet<Daikin>>() {}.type
 
                 parsedDaikins = gson.fromJson(daikinsFile.readText(), listType)
 

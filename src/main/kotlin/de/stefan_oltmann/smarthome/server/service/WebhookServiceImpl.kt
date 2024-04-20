@@ -33,20 +33,26 @@ class WebhookServiceImpl(
 
     override fun triggerWebhook(deviceId: DeviceId) {
 
-        val webhooks = webhookRepository.findForDevice(deviceId)
+        try {
 
-        for (webhook in webhooks) {
+            val webhooks = webhookRepository.findForDevice(deviceId)
 
-            val url = URL(webhook.url)
+            for (webhook in webhooks) {
 
-            val request = Request.Builder().url(url).build()
+                val url = URL(webhook.url)
 
-            val response = httpClient.newCall(request).execute()
+                val request = Request.Builder().url(url).build()
 
-            if (response.isSuccessful)
-                logger.info("Called ${webhook.url}")
-            else
-                logger.error("Failed to call ${webhook.url}")
+                val response = httpClient.newCall(request).execute()
+
+                if (response.isSuccessful)
+                    logger.info("Called ${webhook.url}")
+                else
+                    logger.error("Failed to call ${webhook.url}")
+            }
+
+        } catch (ex: Exception) {
+            logger.error("Triggering WebHooks failed.")
         }
     }
 
