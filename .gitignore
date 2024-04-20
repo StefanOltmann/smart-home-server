@@ -34,6 +34,7 @@ nb-configuration.xml
 /devices.json
 /influxdb.ini
 /server.log
+/keystore.jks
 /server_cert.jks
 /server_cert.jks.cer
 /webhooks.json
