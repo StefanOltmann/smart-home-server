@@ -38,3 +38,4 @@ nb-configuration.xml
 /server_cert.jks
 /server_cert.jks.cer
 /webhooks.json
+/daikins.json
